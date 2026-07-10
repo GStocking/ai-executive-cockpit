@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "启动前端",
+      "type": "shell",
+      "command": "export PATH=\"$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH\"; \"$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback/pnpm\" dev --host 127.0.0.1",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": {
+          "regexp": "^(.*)$",
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "VITE",
+          "endsPattern": "Local:.*5173"
+        }
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "启动后端",
+      "type": "shell",
+      "command": "\"$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3\" main.py",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "python",
+        "pattern": {
+          "regexp": "^(.*)$",
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Started server process",
+          "endsPattern": "Uvicorn running on.*8000"
+        }
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "启动前后端",
+      "dependsOrder": "parallel",
+      "dependsOn": ["启动后端", "启动前端"],
+      "problemMatcher": []
+    }
+  ]
+}
