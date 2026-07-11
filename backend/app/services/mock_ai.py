@@ -76,14 +76,25 @@ def _find_metric(container: Mapping[str, Any], aliases: tuple[str, ...]) -> tupl
     return None
 
 
-def _flatten_value(value: Any) -> str:
-    if not isinstance(value, Mapping):
+def _format_number(value: Any) -> str:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
         return str(value)
-    preferred = ("value", "unit", "change", "trend")
-    parts = [f"{key}={value[key]}" for key in preferred if key in value]
-    if not parts:
-        parts = [f"{key}={item}" for key, item in value.items() if isinstance(item, (str, int, float, bool))]
-    return "，".join(parts) if parts else "已提供结构化数据"
+    if float(value).is_integer():
+        return f"{value:,.0f}"
+    return f"{value:,.2f}".rstrip("0").rstrip(".")
+
+
+def _metric_cells(value: Any) -> tuple[str, str, str]:
+    if not isinstance(value, Mapping):
+        return str(value), "—", "—"
+    current = _format_number(value.get("value", "—"))
+    unit = value.get("unit")
+    if unit:
+        current = f"{current} {unit}"
+    change = value.get("change")
+    change_text = f"{float(change):+.2f}%" if isinstance(change, (int, float)) else "—"
+    trend_text = {"up": "上升", "down": "下降", "flat": "持平"}.get(str(value.get("trend", "")), "—")
+    return current, change_text, trend_text
 
 
 def analyze(
@@ -101,17 +112,18 @@ def analyze(
     snapshot = _snapshot_mapping(business_snapshot)
     container, field_prefix = _kpi_container(snapshot)
     evidence: list[Evidence] = []
-    observations: list[str] = []
+    metric_rows = ["| 指标 | 当前值 | 变化 | 趋势 |", "|---|---:|---:|:---:|"]
     missing: list[str] = []
 
     for label, aliases in _METRICS:
         found = _find_metric(container, aliases)
         if found is None:
             missing.append(label)
-            observations.append(f"- **{label}**：当前快照未提供，暂不判断。")
+            metric_rows.append(f"| {label} | 暂无数据 | — | — |")
             continue
         field, value = found
-        observations.append(f"- **{label}**：{_flatten_value(value)}。")
+        current, change, trend = _metric_cells(value)
+        metric_rows.append(f"| {label} | {current} | {change} | {trend} |")
         evidence.append(Evidence(label, "mock_business_snapshot", f"{field_prefix}{field}", value))
 
     filters = snapshot.get("filters")
@@ -120,7 +132,7 @@ def analyze(
     available = "、".join(item.metric for item in evidence) or "无"
     answer = (
         f"## 经营分析{title_period}\n\n"
-        + "\n".join(observations)
+        + "\n".join(metric_rows)
         + "\n\n### 综合判断\n"
         + (f"本次仅能基于已提供的{available}指标描述当前表现；未提供对比口径、目标或明细时，不推断变化原因。" if evidence else "当前没有可用于分析的经营指标，无法形成经营判断。")
         + "\n\n### 建议\n"

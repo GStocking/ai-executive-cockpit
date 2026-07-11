@@ -42,6 +42,8 @@ def test_chat_uses_mock_ai_analysis(client):
     events = parse_events(response.text)
     answer = "".join(event.get("content", "") for event in events)
     assert "经营分析" in answer
+    assert "| 指标 | 当前值 | 变化 | 趋势 |" in answer
+    assert "value=" not in answer
     assert any(item["source"] == "mock_business_snapshot" for item in events[-1]["evidence"])
 
 
