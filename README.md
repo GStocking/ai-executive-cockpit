@@ -3,6 +3,7 @@
 一个面向服装经营场景的 AI 智能经营驾驶舱 Demo。项目重点展示数据大屏、前端工程拆分、FastAPI 服务设计，以及复杂 SSE 流式交互。
 
 ![经营驾驶舱](docs/assets/dashboard.png)
+![经营驾驶舱](docs/assets/image.png)
 
 > 当前使用模拟经营数据和模拟 AI 服务，不接入企业数据、真实大模型或长期聊天记忆。
 
@@ -124,13 +125,17 @@ start → delta... → done
 4. 打开“问问 AI”，发送经营问题并展示 SSE 流式回答。
 5. 点击停止或输入“模拟超时”，展示取消与重试处理。
 
-演示视频已保存为 [`docs/assets/demo.mov`](docs/assets/demo.mov)：
+演示视频已保存为 [`docs/assets/demo.mp4`](docs/assets/demo.mp4)：
 
-<video src="docs/assets/demo.mov" controls muted width="100%"></video>
+<video src="docs/assets/demo.mp4" controls muted width="100%"></video>
 
 ## 系统边界
 
 当前版本不包含管理端、企业数据接入、用户与权限、数据库、监控和审计。项目定位为可本地运行、代码托管于 GitHub 的面试展示 Demo。
+
+## 第三方地图数据
+
+中国省级 SVG 地图来自 [`@svg-maps/china`](https://github.com/VictorCazanave/svg-maps/tree/master/packages/china)，采用 CC BY 4.0 许可。
 
 ## 关键决策
 
