@@ -5,6 +5,7 @@ import type {Filters, RangeKey} from '../types/dashboard'
 import {MetricCard} from '../components/MetricCard'
 import {CategoryChart, RegionChart, TrendChart} from '../components/Charts'
 import {ChatPanel} from '../components/ChatPanel'
+import {CitySalesMap} from '../components/CitySalesMap'
 
 const ranges: {key: RangeKey; label: string}[] = [
   {key: '7d', label: '近7天'},
@@ -53,7 +54,7 @@ export default function Dashboard() {
       {error && !data
         ? <div className="state"><b>数据加载失败</b><p>{error}</p><button onClick={() => refresh()}>重新加载</button></div>
         : data && selectedMetric
-          ? <><section className="metrics">{data.metrics.map((metric) => <MetricCard key={metric.key} metric={metric} active={active === metric.key} onClick={() => setActive(metric.key)}/>)}</section><section className="grid"><TrendChart data={data.trend} metric={selectedMetric}/><CategoryChart data={data.categories} selected={categoryOptions.find(([value]) => value === filters.category)?.[1] ?? '全部'} onSelect={(label) => setFilter('category', categoryValue[label] ?? 'all')}/><RegionChart data={data.regions} onSelect={(label) => setFilter('region', regionValue[label] ?? 'all')}/></section></>
+          ? <><section className="metrics">{data.metrics.map((metric) => <MetricCard key={metric.key} metric={metric} active={active === metric.key} onClick={() => setActive(metric.key)}/>)}</section><section className="grid"><TrendChart data={data.trend} metric={selectedMetric}/><CategoryChart data={data.categories} selected={categoryOptions.find(([value]) => value === filters.category)?.[1] ?? '全部'} onSelect={(label) => setFilter('category', categoryValue[label] ?? 'all')}/><RegionChart data={data.regions} onSelect={(label) => setFilter('region', regionValue[label] ?? 'all')}/></section><CitySalesMap totalSales={data.snapshot.sales_volume.value}/></>
           : <div className="skeletons">{Array(8).fill(0).map((_, index) => <i key={index}/>)}</div>}
     </main>
     <ChatPanel open={chat} onClose={() => setChat(false)} snapshot={data?.snapshot}/>

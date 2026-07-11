@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@svg-maps/china':
+        specifier: ^2.0.0
+        version: 2.0.0
       lucide-react:
         specifier: 0.468.0
         version: 0.468.0(react@18.3.1)
@@ -416,6 +419,9 @@ packages:
     resolution: {integrity: sha512-BfzEnDJOt9T8M989/lA37EcJgat01wLRnoi5dQf3QzOH7jzpqTAzdDbVfRljVr5r+jzKqpbHeyOfAaXxAd0PAA==}
     cpu: [x64]
     os: [win32]
+
+  '@svg-maps/china@2.0.0':
+    resolution: {integrity: sha512-/B0a4hYJHRtfcUG+x6BudQFWhLQyPoaN2WbqfdEeWeXnwef6oXaE93Msrq2odu72c09vE+G4Ds9+n60Qsr4p1g==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -1184,6 +1190,8 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.62.2':
     optional: true
+
+  '@svg-maps/china@2.0.0': {}
 
   '@types/babel__core@7.20.5':
     dependencies:
